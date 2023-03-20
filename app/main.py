@@ -8,7 +8,7 @@ def handle_connection(con):
             con.send(b"+PONG\r\n")
         except ConnectionError:
             break
-        con.close()
+    con.close()
 
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
