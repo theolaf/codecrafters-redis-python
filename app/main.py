@@ -6,7 +6,7 @@ def handle_connection(con):
         try:
             con.recv(1024)  # wait for client to send data
             con.send(b"+PONG\r\n")
-        except:
+        except ConnectionError:
             break
 
 def main():
