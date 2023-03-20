@@ -15,7 +15,7 @@ def main():
     while True:
         connection, address = server_socket.accept()  # wait for client
         print(f"Connected to {address}")
-        threading.Thread(target=handle_connection, args=(connection)).start()
+        threading.Thread(target=handle_connection, args=((connection)).start()
 
 
 if __name__ == "__main__":
