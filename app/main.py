@@ -1,12 +1,20 @@
 import socket
+import threading
 
+def handle_connection(con):
+    while True:
+        try:
+            con.recv(1024)  # wait for client to send data
+            con.send(b"+PONG\r\n")
+        except:
+            break
 
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
-    client_connection, _ = server_socket.accept()  # wait for client
     while True:
-        client_connection.recv(1024)  # wait for client to send data
-        client_connection.sendall(b"+PONG\r\n")
+        client_connection, address = server_socket.accept()  # wait for client
+        print(f"Connected to {address}")
+        threading.Thread(handle_connection, args=(client_connection)).start()
 
 
 if __name__ == "__main__":
