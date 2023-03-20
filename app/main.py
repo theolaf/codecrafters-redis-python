@@ -13,9 +13,9 @@ def handle_connection(con):
 def main():
     server_socket = socket.create_server(("localhost", 6379), reuse_port=True)
     while True:
-        client_connection, address = server_socket.accept()  # wait for client
+        connection, address = server_socket.accept()  # wait for client
         print(f"Connected to {address}")
-        threading.Thread(handle_connection, args=(client_connection)).start()
+        threading.Thread(target=handle_connection, args=(connection)).start()
 
 
 if __name__ == "__main__":
