@@ -11,7 +11,7 @@ class RedisServer:
     
     def set(self, key, value, expires=None):
         self.db[key] = value
-        self.expiry[key] = time.time() * 1000 + expires
+        self.expiry[key] = time.time() * 1000 + expires if expires else None
         print(f"Set {key}: {value}")
     
     def remove(self, key):
@@ -20,8 +20,9 @@ class RedisServer:
 
     def get(self, key):
         value = self.db.get(key)
-        if value:
-            if self.expiry.get(key) < time.time() * 1000:
+        expires = self.expiry.get(key)
+        if value :
+            if expires and expires < time.time() * 1000:
                 self.remove(key)
                 return None
             return value
