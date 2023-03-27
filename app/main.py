@@ -1,18 +1,31 @@
 import socket
 import threading
+import time
 
 class RedisServer:
     # constructor, getters and setters
     def __init__(self, address=(("localhost", 6379))):
         self.db = {}
+        self.expiry = {}
         self.server_socket = socket.create_server(address, reuse_port=True)
     
-    def set(self, key, value):
+    def set(self, key, value, expires=None):
         self.db[key] = value
+        self.expiry[key] = time.time() * 1000 + expires
         print(f"Set {key}: {value}")
+    
+    def remove(self, key):
+        self.db.pop(key)
+        self.expiry.pop(key)
 
     def get(self, key):
-        return self.db.get(key)
+        value = self.db.get(key)
+        if value:
+            if self.expiry.get(key) < time.time() * 1000:
+                self.remove(key)
+                return None
+            return value
+        return None
     
     # connection handling
     def event_loop(self):
