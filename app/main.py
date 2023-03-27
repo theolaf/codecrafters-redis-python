@@ -62,7 +62,8 @@ class RedisServer:
         if command == "echo":
             return f"${len(input[4])}\r\n{input[4]}\r\n"
         if command == "set":
-            self.set(input[4], input[6])
+            expires = None if len(input) < 11 else int(input[10])
+            self.set(input[4], input[6], expires)
             return "+OK\r\n"
         if command == "get":
             value = self.get(input[4])
